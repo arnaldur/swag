@@ -120,7 +120,7 @@ func TestDefaultFieldParser(t *testing.T) {
 			}},
 		).ComplementSchema(&schema)
 		assert.NoError(t, err)
-		assert.Equal(t, []interface{}{"a", "b", "c"}, schema.Enum)
+		assert.Equal(t, []interface{}{"a", "b", "c"}, schema.Items.Schema.Enum)
 	})
 
 	t.Run("EnumVarNames tag", func(t *testing.T) {

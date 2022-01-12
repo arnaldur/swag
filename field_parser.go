@@ -351,7 +351,7 @@ func (ps *tagBaseFieldParser) ComplementSchema(schema *spec.Schema) error {
 		schema.MinItems = structField.minItems
 		schema.UniqueItems = structField.unique
 		eleSchema = schema.Items.Schema
-		schema.Items.Schema.Enum = structField.enums
+		eleSchema.Enum = structField.enums
 		eleSchema.Format = structField.formatType
 	}
 	eleSchema.Maximum = structField.maximum
