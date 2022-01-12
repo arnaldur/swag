@@ -359,7 +359,12 @@ func (ps *tagBaseFieldParser) ComplementSchema(schema *spec.Schema) error {
 	eleSchema.MultipleOf = structField.multipleOf
 	eleSchema.MaxLength = structField.maxLength
 	eleSchema.MinLength = structField.minLength
-	eleSchema.Enum = structField.enums
+	if structField.schemaType == ARRAY {
+		schema.Enum = structField.enums
+	} else {
+		eleSchema.Enum = structField.enums
+	}
+
 	return nil
 }
 

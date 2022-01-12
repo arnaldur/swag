@@ -100,6 +100,29 @@ func TestDefaultFieldParser(t *testing.T) {
 		assert.Error(t, err)
 	})
 
+	t.Run("Enums tag on array", func(t *testing.T) {
+		t.Parallel()
+
+		schema := spec.Schema{}
+		schema.Type = []string{"array"}
+		schema.Items = &spec.SchemaOrArray{
+			Schema: &spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Type: []string{"string"},
+				},
+			},
+		}
+
+		err := newTagBaseFieldParser(
+			&Parser{},
+			&ast.Field{Tag: &ast.BasicLit{
+				Value: `json:"test" enums:"a,b,c"`,
+			}},
+		).ComplementSchema(&schema)
+		assert.NoError(t, err)
+		assert.Equal(t, []interface{}{"a", "b", "c"}, schema.Enum)
+	})
+
 	t.Run("EnumVarNames tag", func(t *testing.T) {
 		t.Parallel()
 
@@ -115,6 +138,7 @@ func TestDefaultFieldParser(t *testing.T) {
 		).ComplementSchema(&schema)
 		schema.Extensions.Add("x-enum-varnames", []string{"Daily", "Weekly", "Monthly"})
 		assert.NoError(t, err)
+		t.Logf("Schema: %+v", schema)
 		assert.Equal(t, []string{"Daily", "Weekly", "Monthly"}, schema.Extensions["x-enum-varnames"])
 
 		schema = spec.Schema{}
