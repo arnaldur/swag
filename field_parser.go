@@ -350,8 +350,8 @@ func (ps *tagBaseFieldParser) ComplementSchema(schema *spec.Schema) error {
 		schema.MaxItems = structField.maxItems
 		schema.MinItems = structField.minItems
 		schema.UniqueItems = structField.unique
-
 		eleSchema = schema.Items.Schema
+		schema.Items.Schema.Enum = structField.enums
 		eleSchema.Format = structField.formatType
 	}
 	eleSchema.Maximum = structField.maximum
@@ -359,11 +359,7 @@ func (ps *tagBaseFieldParser) ComplementSchema(schema *spec.Schema) error {
 	eleSchema.MultipleOf = structField.multipleOf
 	eleSchema.MaxLength = structField.maxLength
 	eleSchema.MinLength = structField.minLength
-	if structField.schemaType == ARRAY {
-		schema.Enum = structField.enums
-	} else {
-		eleSchema.Enum = structField.enums
-	}
+	eleSchema.Enum = structField.enums
 
 	return nil
 }
